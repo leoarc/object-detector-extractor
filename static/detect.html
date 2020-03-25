@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <style>
+      #loader {
+        border: 12px solid #f3f3f3;
+        border-radius: 50%;
+        border-top: 12px solid #444444;
+        width: 70px;
+        height: 70px;
+        animation: spin 1s linear infinite;
+      }
+      .con {
+        width: 80%;
+
+        margin: auto;
+
+        padding: 20px;
+      }
+
+      @keyframes spin {
+        100% {
+          transform: rotate(360deg);
+        }
+      }
+
+      .center {
+        position: absolute;
+        top: 0;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        margin: auto;
+      }
+      img {
+        float: left;
+      }
+      div.input1 {
+        border-style: solid;
+      }
+      div.input2 {
+        border-style: solid;
+      }
+      div.add1 {
+        border-style: none;
+      }
+    </style>
+    <title>Detect object app</title>
+
+    <link
+      rel="stylesheet"
+      href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
+      integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh"
+      crossorigin="anonymous"
+    />
+
+    <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@1.0.0/dist/tf.min.js"></script>
+
+    <script src="https://cdn.jsdelivr.net/npm/@tensorflow-models/coco-ssd"></script>
+  </head>
+  <body>
+    <main>
+      <div id="loader" class="center" style="display:none"></div>
+
+      <div class="con">
+        <button id="user-model-button" class="btn btn-dark">
+          Detect objects in images
+        </button>
+      </div>
+
+      <br /><br />
+
+      <div class="con" style="display:none" id="image-data">
+        <input type="file" id="ima" name="ima1" value="ima2" multiple />
+        <label>Choose images</label><br />
+      </div>
+
+      <div class="con" style="display:none" id="detect">
+        <button id="detect-button" class="btn btn-dark">
+          Detect objects
+        </button>
+      </div>
+
+      <div id="res">
+        <ul id="results"></ul>
+      </div>
+      <div id="choices" style="display:none">
+        Choose the class of object to draw box:<br />
+        <div id="choice"></div>
+      </div>
+      <div class="con" id="draw" style="display:none">
+        <button id="draw-button" class="btn btn-dark">
+          Draw
+        </button>
+      </div>
+      <div id="finalImg"></div>
+
+      <div class="col-6">
+        <canvas id="myCanvas1" width="2000" height="2000" style="display:none">
+          Your browser does not support the HTML5 canvas tag.</canvas
+        >
+      </div>
+    </main>
+    <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+
+    <script src="predict.js"></script>
+  </body>
+</html>
