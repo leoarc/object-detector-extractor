@@ -65,8 +65,13 @@ async function dataImg(event) {
 $("#ima").change(async function(event) {
   $("#loader").show();
   await dataImg(event);
-  $("#loader").hide();
+
   $("#detect").show();
+  $("#finalImg").html("");
+  $("#draw").hide();
+  $("#choices").hide();
+  $("#res").hide();
+  $("#loader").hide();
 });
 let prediction;
 $("#detect-button").click(async function() {
@@ -74,6 +79,7 @@ $("#detect-button").click(async function() {
   await detectObj();
   $("#draw").show();
   $("#choices").show();
+  $("#res").show();
   $("#loader").hide();
 });
 function foo(arr) {
@@ -136,28 +142,54 @@ async function detectObj() {
     );
   }
 }
+var ch;
 $("#draw-button").click(async function() {
-  var ch = $("input[name=choice]:checked", "#choice").val();
+  ch = $("input[name=choice]:checked", "#choice").val();
   console.log(ch);
   await drawImg(ch);
+  $("#down").show();
 });
+$("#down-button").click(async function() {
+  await downloadImg();
+});
+
 async function drawImg(cho) {
+  $("#finalImg").html("");
+
   for (var j = 0; j < num_img; j++) {
-    var canvas1 = $("<canvas/>", {
-      id: "mycanvas" + j,
-      height: img_dim[j][0],
-      width: img_dim[j][1]
-    });
-    $("#finalImg").append(canvas1);
+    let f = 0;
+    for (var i = 0; i < prediction[j].length; i++) {
+      if (prediction[j][i].class == cho) {
+        f = f + 1;
+      }
+    }
+    if (f > 0) {
+      var canvas1 = $("<canvas/>", {
+        id: "mycanvas" + j,
+        height: img_dim[j][0],
+        width: img_dim[j][1]
+      });
+      $("#finalImg").append(canvas1);
+    }
   }
   for (var j = 0; j < num_img; j++) {
-    let xs1 = tf.tensor1d(x_temp1[j]);
-    xs = xs1.as3D(img_dim[j][1], img_dim[j][0], 3);
-    var canvas = document.getElementById("mycanvas" + j);
-    var ctx = canvas.getContext("2d");
-    var w = img_dim[0][1];
-    var h = img_dim[0][0];
-    await tf.browser.toPixels(xs, canvas);
+    let f = 0;
+    for (var i = 0; i < prediction[j].length; i++) {
+      if (prediction[j][i].class == cho) {
+        f = f + 1;
+      }
+    }
+    if (f > 0) {
+      let xs1 = tf.tensor1d(x_temp1[j]);
+      xs = xs1.as3D(img_dim[j][1], img_dim[j][0], 3);
+      var canvas = document.getElementById("mycanvas" + j);
+      var ctx = canvas.getContext("2d");
+      var w = img_dim[0][1];
+      var h = img_dim[0][0];
+      await tf.browser.toPixels(xs, canvas);
+      xs1.dispose();
+      xs.dispose();
+    }
     for (var i = 0; i < prediction[j].length; i++) {
       if (prediction[j][i].class == cho) {
         const x = prediction[j][i].bbox[0];
@@ -170,6 +202,65 @@ async function drawImg(cho) {
       }
     }
   }
+}
+
+function convertCanvasToImage(canvas) {
+  var image = new Image();
+  image.src = canvas.toDataURL("image/png");
+  return image;
+}
+function getBase64Image(img) {
+  var canvas = document.createElement("canvas");
+  canvas.width = img.width;
+  canvas.height = img.height;
+  var ctx = canvas.getContext("2d");
+  ctx.drawImage(img, 0, 0);
+  var dataURL = canvas.toDataURL("image/png");
+  return dataURL.replace(/^data:image\/(png|jpg);base64,/, "");
+}
+
+async function downloadImg() {
+  var img9 = new Array();
+  var lab = new Array();
+  for (var j = 0; j < num_img; j++) {
+    for (var i = 0; i < prediction[j].length; i++) {
+      if (prediction[j][i].class == ch) {
+        var canvas = document.getElementById("myCanvas2");
+        canvas.width = prediction[j][i].bbox[2];
+        canvas.height = prediction[j][i].bbox[3];
+        var ctx = canvas.getContext("2d");
+        var c = document.getElementById("mycanvas" + j);
+        ctx.drawImage(
+          c,
+          prediction[j][i].bbox[0],
+          prediction[j][i].bbox[1],
+          prediction[j][i].bbox[2],
+          prediction[j][i].bbox[3],
+          0,
+          0,
+          prediction[j][i].bbox[2],
+          prediction[j][i].bbox[3]
+        );
+
+        img9.push(
+          canvas.toDataURL().replace(/^data:image\/(png|jpg);base64,/, "")
+        );
+        lab.push(prediction[j][i].class);
+      }
+    }
+  }
+  console.log(lab.length);
+  var zip = new JSZip();
+  zip.folder("images");
+  var img = zip.folder("images");
+
+  for (var i = 0; i < lab.length; i++) {
+    console.log("aa");
+    img.file(lab[i] + i + ".png", img9[i], { base64: true });
+  }
+  zip.generateAsync({ type: "blob" }).then(function(content) {
+    saveAs(content, "download.zip");
+  });
 }
 
 $("#image-selector").change(function() {

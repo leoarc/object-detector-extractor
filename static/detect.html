@@ -61,7 +61,6 @@
   <body>
     <main>
       <div id="loader" class="center" style="display:none"></div>
-
       <div class="con">
         <button id="user-model-button" class="btn btn-dark">
           Detect objects in images
@@ -69,7 +68,6 @@
       </div>
 
       <br /><br />
-
       <div class="con" style="display:none" id="image-data">
         <input type="file" id="ima" name="ima1" value="ima2" multiple />
         <label>Choose images</label><br />
@@ -94,9 +92,27 @@
         </button>
       </div>
       <div id="finalImg"></div>
+      <div class="con" id="down">
+        <button id="down-button" class="btn btn-dark">
+          Download
+        </button>
+      </div>
+      <div class="col-6">
+        <img id="sel" src="" />
+      </div>
 
       <div class="col-6">
         <canvas id="myCanvas1" width="2000" height="2000" style="display:none">
+          Your browser does not support the HTML5 canvas tag.</canvas
+        >
+      </div>
+      <div class="col-6">
+        <canvas id="myCanvas2" width="2000" height="2000" style="display:none">
+          Your browser does not support the HTML5 canvas tag.</canvas
+        >
+      </div>
+      <div class="col-6">
+        <canvas id="myCanvas3" width="2000" height="2000" style="display:none">
           Your browser does not support the HTML5 canvas tag.</canvas
         >
       </div>
@@ -104,5 +120,17 @@
     <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
 
     <script src="predict.js"></script>
+    <script
+      type="text/javascript"
+      src="//stuk.github.io/jszip/dist/jszip.js"
+    ></script>
+    <script
+      type="text/javascript"
+      src="//stuk.github.io/jszip-utils/dist/jszip-utils.js"
+    ></script>
+    <script
+      type="text/javascript"
+      src="//stuk.github.io/jszip/vendor/FileSaver.js"
+    ></script>
   </body>
 </html>
