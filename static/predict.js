@@ -155,7 +155,6 @@ $("#draw-button").click(async function() {
   await drawImg(ch);
 });
 $("#down-button").click(async function() {
-  var sex = 0;
   await downloadImg();
 });
 
@@ -231,7 +230,6 @@ function getBase64Image(img) {
 }
 
 async function downloadImg() {
-  const sex = 1;
   var img9 = new Array();
   var lab = new Array();
   for (var j = 0; j < num_img; j++) {
