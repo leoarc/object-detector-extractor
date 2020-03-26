@@ -15,7 +15,7 @@ let img_class;
 let img_dim;
 let count;
 let sum_count;
-
+var ch;
 function addImageProcess(src) {
   return new Promise((resolve, reject) => {
     let img = new Image();
@@ -77,9 +77,8 @@ let prediction;
 $("#detect-button").click(async function() {
   $("#loader").show();
   await detectObj();
-  $("#draw").show();
-  $("#choices").show();
-  $("#res").show();
+
+  ch = "null";
   $("#loader").hide();
 });
 function foo(arr) {
@@ -123,84 +122,96 @@ async function detectObj() {
   model.dispose();
   counts = foo(img_class);
   sum_count = counts[1].reduce((a, b) => a + b, 0);
-  $("#results").html("<li>Total Objects detected : " + sum_count + "</li>");
-  $("#choice").html("");
+  if (sum_count == 0) {
+    alert("No objects found");
+  } else {
+    $("#results").html("<li>Total Objects detected : " + sum_count + "</li>");
+    $("#choice").html("");
 
-  for (var j = 0; j < counts[0].length; j++) {
-    $("#results").append(
-      "<li>" + counts[0][j] + " : " + counts[1][j] + "</li>"
-    );
+    for (var j = 0; j < counts[0].length; j++) {
+      $("#results").append(
+        "<li>" + counts[0][j] + " : " + counts[1][j] + "</li>"
+      );
 
-    $("#choice").append(
-      '<input type="radio" value= ' +
-        counts[0][j] +
-        " id= class" +
-        j +
-        ' name = "choice" />' +
-        counts[0][j] +
-        "<br/>"
-    );
+      $("#choice").append(
+        '<input type="radio" value= ' +
+          counts[0][j] +
+          " id= class" +
+          j +
+          ' name = "choice" />' +
+          counts[0][j] +
+          "<br/>"
+      );
+    }
+    $("#draw").show();
+    $("#choices").show();
+    $("#res").show();
   }
 }
-var ch;
+
 $("#draw-button").click(async function() {
   ch = $("input[name=choice]:checked", "#choice").val();
   console.log(ch);
   await drawImg(ch);
-  $("#down").show();
 });
 $("#down-button").click(async function() {
+  var sex = 0;
   await downloadImg();
 });
 
 async function drawImg(cho) {
   $("#finalImg").html("");
-
-  for (var j = 0; j < num_img; j++) {
-    let f = 0;
-    for (var i = 0; i < prediction[j].length; i++) {
-      if (prediction[j][i].class == cho) {
-        f = f + 1;
+  if (cho == undefined) {
+    alert("Please choose a class");
+  } else {
+    for (var j = 0; j < num_img; j++) {
+      let f = 0;
+      for (var i = 0; i < prediction[j].length; i++) {
+        if (prediction[j][i].class == cho) {
+          f = f + 1;
+        }
+      }
+      if (f > 0) {
+        var canvas1 = $("<canvas/>", {
+          id: "mycanvas" + j,
+          height: img_dim[j][0],
+          width: img_dim[j][1]
+        });
+        $("#finalImg").append(canvas1);
+        $("#finalImg").append("<br / >");
       }
     }
-    if (f > 0) {
-      var canvas1 = $("<canvas/>", {
-        id: "mycanvas" + j,
-        height: img_dim[j][0],
-        width: img_dim[j][1]
-      });
-      $("#finalImg").append(canvas1);
-    }
-  }
-  for (var j = 0; j < num_img; j++) {
-    let f = 0;
-    for (var i = 0; i < prediction[j].length; i++) {
-      if (prediction[j][i].class == cho) {
-        f = f + 1;
+    for (var j = 0; j < num_img; j++) {
+      let f = 0;
+      for (var i = 0; i < prediction[j].length; i++) {
+        if (prediction[j][i].class == cho) {
+          f = f + 1;
+        }
+      }
+      if (f > 0) {
+        let xs1 = tf.tensor1d(x_temp1[j]);
+        xs = xs1.as3D(img_dim[j][1], img_dim[j][0], 3);
+        var canvas = document.getElementById("mycanvas" + j);
+        var ctx = canvas.getContext("2d");
+        var w = img_dim[0][1];
+        var h = img_dim[0][0];
+        await tf.browser.toPixels(xs, canvas);
+        xs1.dispose();
+        xs.dispose();
+      }
+      for (var i = 0; i < prediction[j].length; i++) {
+        if (prediction[j][i].class == cho) {
+          const x = prediction[j][i].bbox[0];
+          const y = prediction[j][i].bbox[1];
+          const width = prediction[j][i].bbox[2];
+          const height = prediction[j][i].bbox[3];
+          ctx.strokeStyle = "#2fff00";
+          ctx.lineWidth = 3;
+          ctx.strokeRect(x, y, width, height);
+        }
       }
     }
-    if (f > 0) {
-      let xs1 = tf.tensor1d(x_temp1[j]);
-      xs = xs1.as3D(img_dim[j][1], img_dim[j][0], 3);
-      var canvas = document.getElementById("mycanvas" + j);
-      var ctx = canvas.getContext("2d");
-      var w = img_dim[0][1];
-      var h = img_dim[0][0];
-      await tf.browser.toPixels(xs, canvas);
-      xs1.dispose();
-      xs.dispose();
-    }
-    for (var i = 0; i < prediction[j].length; i++) {
-      if (prediction[j][i].class == cho) {
-        const x = prediction[j][i].bbox[0];
-        const y = prediction[j][i].bbox[1];
-        const width = prediction[j][i].bbox[2];
-        const height = prediction[j][i].bbox[3];
-        ctx.strokeStyle = "#2fff00";
-        ctx.lineWidth = 1;
-        ctx.strokeRect(x, y, width, height);
-      }
-    }
+    $("#down").show();
   }
 }
 
@@ -220,6 +231,7 @@ function getBase64Image(img) {
 }
 
 async function downloadImg() {
+  const sex = 1;
   var img9 = new Array();
   var lab = new Array();
   for (var j = 0; j < num_img; j++) {

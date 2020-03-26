@@ -10,6 +10,13 @@
         height: 70px;
         animation: spin 1s linear infinite;
       }
+      div.tab {
+       
+        border-style: solid;
+       
+        border-radius: 5px;
+        padding: 10px;
+      }
       .con {
         width: 80%;
 
@@ -35,9 +42,7 @@
       img {
         float: left;
       }
-      div.input1 {
-        border-style: solid;
-      }
+     
       div.input2 {
         border-style: solid;
       }
@@ -61,40 +66,72 @@
   <body>
     <main>
       <div id="loader" class="center" style="display:none"></div>
-      <div class="con">
-        <button id="user-model-button" class="btn btn-dark">
+      <div class="con" style=" width: 25%; margin: 0 auto">
+        <button id="user-model-button" class="btn btn-info">
           Detect objects in images
         </button>
       </div>
 
       <br /><br />
-      <div class="con" style="display:none" id="image-data">
+      <div
+        class="con"
+        style="display:none ; width: 25%; margin: 0 auto"
+        id="image-data"
+      >
+        <label
+          ><h4><b>Choose images</b></h4></label
+        ><br />
         <input type="file" id="ima" name="ima1" value="ima2" multiple />
-        <label>Choose images</label><br />
       </div>
 
-      <div class="con" style="display:none" id="detect">
-        <button id="detect-button" class="btn btn-dark">
+      <div
+        class="con"
+        style="display:none ; width: 25%; margin: 0 auto"
+        id="detect"
+      >
+        <button id="detect-button" class="btn btn-info">
           Detect objects
         </button>
       </div>
 
-      <div id="res">
+      <div
+        id="res"
+        style="display:none ;width: 25%; margin: 0 auto"
+        class="tab"
+      >
         <ul id="results"></ul>
+    
+        
       </div>
-      <div id="choices" style="display:none">
-        Choose the class of object to draw box:<br />
+    </br>
+      <div
+        id="choices"
+        style="display:none ; width: 25%; margin: 0 auto"
+        class="tab">
+      
+        <b>Choose the class of object to draw boxes:<br /></b> 
         <div id="choice"></div>
       </div>
-      <div class="con" id="draw" style="display:none">
-        <button id="draw-button" class="btn btn-dark">
+  
+    </br>
+
+      <div
+        class="con"
+        id="draw"
+        style="display:none ; width: 25%; margin: 0 auto"
+      >
+        <button id="draw-button" class="btn btn-info">
           Draw
         </button>
       </div>
-      <div id="finalImg"></div>
-      <div class="con" id="down">
-        <button id="down-button" class="btn btn-dark">
-          Download
+      <div id="finalImg" style=" width: 25%; margin: 0 auto"></div>
+      <div
+        class="con"
+        id="down"
+        style="display:none ; width: 25%; margin: 0 auto"
+      >
+        <button id="down-button" class="btn btn-info">
+          Download cropped images
         </button>
       </div>
       <div class="col-6">
