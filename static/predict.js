@@ -71,6 +71,7 @@ $("#ima").change(async function(event) {
   $("#draw").hide();
   $("#choices").hide();
   $("#res").hide();
+  $("#down-button").hide();
   $("#loader").hide();
 });
 let prediction;
@@ -210,7 +211,7 @@ async function drawImg(cho) {
         }
       }
     }
-    $("#down").show();
+    $("#down-button").show();
   }
 }
 
