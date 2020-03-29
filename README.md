@@ -4,7 +4,7 @@
 
 Hosted app : https://obj-det-ext.herokuapp.com/
 
-Sample Data for training and testing :  [Google Drive Link](https://drive.google.com/drive/folders/1nWt038sxZei2JCARft2xyGrWwMW4rt8P?usp=sharing)
+Sample Data for training and testing :  [Google Drive Link]()
 
 ### Steps to use  :
 1) Click on ``` Detect objects in images ```
