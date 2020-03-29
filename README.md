@@ -27,4 +27,4 @@ STEPS :
 1) Clone the repo
 2) ``` cd local-server ```
 3)``` nodejs server.js ```
-4) Go to http://localhost:3000/predict.html
+4) Go to http://localhost:3000/detect.html
