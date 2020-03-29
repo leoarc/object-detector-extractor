@@ -24,7 +24,7 @@ Sample Data for testing :  [Google Drive Link](https://drive.google.com/open?id=
 
 STEPS :
 
-1) Clone the repo
+1) Clone the repo 
 2) ``` cd local-server ```
-3)``` nodejs server.js ```
+3) ``` nodejs server.js ```
 4) Go to http://localhost:3000/detect.html
