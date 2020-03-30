@@ -6,6 +6,10 @@ Hosted app : https://obj-det-ext.herokuapp.com/
 
 Sample Data for testing :  [Google Drive Link](https://drive.google.com/open?id=1KHQNxEshEsBMv0JRlQtX2jC6lyvPwQAe)
 
+Demo :
+![](final1.gif)
+
+
 ### Steps to use  :
 1) Click on ``` Detect objects in images ```
 2) Upload multiple images (few samples are given in the link above ; can use any images)
@@ -28,3 +32,17 @@ STEPS :
 2) ``` cd local-server ```
 3) ``` nodejs server.js ```
 4) Go to http://localhost:3000/detect.html
+
+Note :
+Model used is the tfjs [CocoSsd](https://github.com/tensorflow/tfjs-models/tree/master/coco-ssd).   
+
+Technologies used :
+
+1. Javascript
+2. HTML
+3. JQuery
+4. JSZip
+5. tfjs
+6. BootStrap
+
+
